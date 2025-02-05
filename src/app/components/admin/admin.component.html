@@ -1,0 +1,67 @@
+<div class="flex justify-content-center w-100 h-screen p-5">
+    <div class="flex flex-column w-9 p-5">
+        <h1>Orders</h1>
+        <p-table [value]="orders" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }" class="mt-5">
+            <ng-template #header>
+                <tr>
+                    <th style="width:25%">
+                        Code
+                    </th>
+                    <th style="width:25%">
+                        Name
+                    </th>
+                    <th style="width:25%">
+                        Inventory Status
+                    </th>
+                    <th style="width:25%">
+                        Price
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-order let-editing="editing">
+                <tr>
+                    <!-- <td [pEditableColumn]="order.code" pEditableColumnField="code">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.code" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.code }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.name" pEditableColumnField="name">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.name" required />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.name }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.inventoryStatus" pEditableColumnField="inventoryStatus">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText [(ngModel)]="order.inventoryStatus" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.inventoryStatus }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.publishingHouse" pEditableColumnField="price">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.price" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.price | currency: 'USD' }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td> -->
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
