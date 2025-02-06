@@ -7,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { definePreset } from "@primeng/themes";
+import { SupabaseClient } from '@supabase/supabase-js';
 
 
 const MyPreset = definePreset(Aura, {

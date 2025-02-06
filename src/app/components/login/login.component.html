@@ -1,0 +1,19 @@
+<p-toast />
+<div class="flex justify-content-center w-100 h-screen p-5 font-size">
+    <p-card [style]="{ 'min-width': '50vw', 'min-height': '50vh' }" styleClass="mt-5 p-5">
+        <h2>Login</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column mt-5">
+            <div class="flex flex-column gap-3">
+                <label for="email">Email</label>
+                <input id="email" type="email" pInputText formControlName="email" class="font-size" />
+                <small *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">Email is required. Please provide a valid one.</small>
+            </div>
+            <div class="flex flex-column gap-3 mt-5">
+                <label for="password">Password</label>
+                <input id="password" pInputText type="password" formControlName="password" class="font-size" />
+                <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">Password is required</small>
+            </div>
+            <p-button label="Submit" [disabled]="loginForm.invalid || loading" (onClick)="onSubmit()" styleClass="mt-5" [style]="{ 'font-size': '20px' }" />
+        </form>
+    </p-card>
+</div>
