@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button'
 import { InputTextModule } from 'primeng/inputtext'
 import { SelectModule } from 'primeng/select'
 import { ToastModule } from 'primeng/toast';
+import { SupabaseService } from '../../services/supabase.service'
 
 @Component({
   selector: 'app-order',
@@ -24,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
 export class OrderComponent {
   readonly fb = inject(FormBuilder)
   readonly messageService = inject(MessageService)
+  readonly supabase = inject(SupabaseService)
 
   orderForm: FormGroup = this.fb.group({
     fullName: ['', Validators.required],
@@ -36,9 +38,25 @@ export class OrderComponent {
     address: ['', Validators.required],
     urgency: ['', Validators.required]
   })
+  
+  async onSubmit() {
+    const insert = await this.supabase.client
+      .from('orders')
+      .insert({
+        created_at: new Date(),
+        full_name: this.orderForm.value.fullName,
+        phone: Number(this.orderForm.value.phone),
+        email: this.orderForm.value.email,
+        book_name: this.orderForm.value.bookName,
+        book_author: this.orderForm.value.bookAuthor,
+        amount: Number(this.orderForm.value.amount),
+        publishing_house: this.orderForm.value.publishingHouse,
+        address: this.orderForm.value.address,
+        urgency: this.orderForm.value.urgency,
+      })
 
-  onSubmit() {
-    if (this.orderForm.valid) {
+    if (insert.error) this.messageService.add({ severity: 'error', summary: 'Error', detail: 'We could not process your order... Please try again' })
+    else {  
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Order submitted successfully!' })
       this.orderForm.reset()
     }

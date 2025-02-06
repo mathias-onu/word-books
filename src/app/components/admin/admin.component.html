@@ -1,65 +1,157 @@
-<div class="flex justify-content-center w-100 h-screen p-5">
-    <div class="flex flex-column w-9 p-5">
+<p-toast />
+<div class="flex justify-content-center w-100 h-screen pt-5">
+    <div class="flex flex-column w-full pl-5 pr-5 mt-5">
         <h1>Orders</h1>
         <p-table [value]="orders" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }" class="mt-5">
             <ng-template #header>
                 <tr>
-                    <th style="width:25%">
-                        Code
-                    </th>
-                    <th style="width:25%">
-                        Name
-                    </th>
-                    <th style="width:25%">
-                        Inventory Status
-                    </th>
-                    <th style="width:25%">
-                        Price
-                    </th>
+                    <th style="width:25%">Id</th>
+                    <th style="width:25%">Ordered at</th>
+                    <th style="width:25%">Full name</th>
+                    <th style="width:25%">Phone number</th>
+                    <th style="width:25%">Email</th>
+                    <th style="width:25%">Book name</th>
+                    <th style="width:25%">Book author</th>
+                    <th style="width:25%">Amount</th>
+                    <th style="width:25%">Editura</th>
+                    <th style="width:25%">Address</th>
+                    <th style="width:25%">Urgency</th>
+                    <th style="width:25%">Price</th>
+                    <th style="width:25%">Status</th>
                 </tr>
             </ng-template>
             <ng-template #body let-order let-editing="editing">
                 <tr>
-                    <!-- <td [pEditableColumn]="order.code" pEditableColumnField="code">
+                    <td [pEditableColumn]="order.id" pEditableColumnField="id">
                         <p-cellEditor>
                             <ng-template #input>
-                                <input pInputText type="text" [(ngModel)]="order.code" />
+                                <input pInputText type="text" [(ngModel)]="order.id" />
                             </ng-template>
                             <ng-template #output>
-                                {{ order.code }}
+                                {{ order.id }}
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td [pEditableColumn]="order.name" pEditableColumnField="name">
+                    <td [pEditableColumn]="order.created_at" pEditableColumnField="created_at">
                         <p-cellEditor>
                             <ng-template #input>
-                                <input pInputText type="text" [(ngModel)]="order.name" required />
+                                <input pInputText type="text" [(ngModel)]="order.created_at" required />
                             </ng-template>
                             <ng-template #output>
-                                {{ order.name }}
+                                {{ order.created_at | date }}
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td [pEditableColumn]="order.inventoryStatus" pEditableColumnField="inventoryStatus">
+                    <td [pEditableColumn]="order.full_name" pEditableColumnField="full_name">
                         <p-cellEditor>
                             <ng-template #input>
-                                <input pInputText [(ngModel)]="order.inventoryStatus" />
+                                <input pInputText [(ngModel)]="order.full_name" />
                             </ng-template>
                             <ng-template #output>
-                                {{ order.inventoryStatus }}
+                                {{ order.full_name }}
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td [pEditableColumn]="order.publishingHouse" pEditableColumnField="price">
+                    <td [pEditableColumn]="order.phone" pEditableColumnField="phone">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.phone" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.phone }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.email" pEditableColumnField="email">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.email" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.email }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.book_name" pEditableColumnField="book_name">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.book_name" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.book_name }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.book_author" pEditableColumnField="book_author">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.book_author" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.book_author }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.amount" pEditableColumnField="amount">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.amount" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.amount }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.publishing_house" pEditableColumnField="publishing_house">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.publishing_house" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.publishing_house }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.address" pEditableColumnField="address">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.address" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.address }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.urgency" pEditableColumnField="urgency">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.urgency" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.urgency }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td [pEditableColumn]="order.price" pEditableColumnField="price">
                         <p-cellEditor>
                             <ng-template #input>
                                 <input pInputText type="text" [(ngModel)]="order.price" />
                             </ng-template>
                             <ng-template #output>
-                                {{ order.price | currency: 'USD' }}
+                                {{ order.price }}
                             </ng-template>
                         </p-cellEditor>
-                    </td> -->
+                    </td>
+                    <td [pEditableColumn]="order.status" pEditableColumnField="status">
+                        <p-cellEditor>
+                            <ng-template #input>
+                                <input pInputText type="text" [(ngModel)]="order.status" />
+                            </ng-template>
+                            <ng-template #output>
+                                {{ order.status }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
                 </tr>
             </ng-template>
         </p-table>

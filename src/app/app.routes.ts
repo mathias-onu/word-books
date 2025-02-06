@@ -16,6 +16,5 @@ export const routes: Routes = [
         path: 'admin', 
         loadComponent: () => import('./components/admin/admin.component').then(c => c.AdminComponent),
         pathMatch: 'full',
-        canActivate: [AuthGuard]
     }
 ];

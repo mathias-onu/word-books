@@ -10,25 +10,25 @@ import { environment } from '../../environments/environment.development'
   providedIn: 'root'
 })
 export class SupabaseService {
-  readonly supabase: SupabaseClient
+  readonly client: SupabaseClient
   readonly _session: AuthSession | null = null
 
   constructor() {
-    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
+    this.client = createClient(environment.supabaseUrl, environment.supabaseKey)
   }
 
   get session() {
-    return this.supabase.auth.getSession()
+    return this.client.auth.getSession()
   }
 
   signIn(email: string, password: string) {
-    return this.supabase.auth.signInWithPassword({
+    return this.client.auth.signInWithPassword({
       email: email,
       password: password
     })
   }
 
   signOut() {
-    return this.supabase.auth.signOut()
+    return this.client.auth.signOut()
   }
 }
