@@ -58,7 +58,7 @@
     @else {
         <div class="flex flex-column w-full pl-5 pr-5 mt-5">
             <h1>Orders</h1>
-            <p-button icon="pi pi-refresh" (onClick)="getData()" [rounded]="true" severity="secondary" class="mt-3" />
+            <p-button icon="pi pi-refresh" (onClick)="getData()" [rounded]="true" [outlined]="true" severity="primary" class="mt-3" />
             <p-table [value]="orders" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }" class="mt-3">
                 <ng-template #header>
                     <tr>
@@ -81,7 +81,7 @@
                 <ng-template #body let-order let-editing="editing" let-i="rowIndex">
                     <tr>
                         <td>
-                            <p-button icon="pi pi-pencil" (onClick)="openEditDialog(order)" severity="secondary" id="editOrder" />
+                            <p-button icon="pi pi-pencil" (onClick)="openEditDialog(order)" severity="primary" [outlined]="true" id="editOrder" />
                         </td>
                         <td>{{ order.id }}</td>
                         <td>{{ order.created_at | date }}</td>
