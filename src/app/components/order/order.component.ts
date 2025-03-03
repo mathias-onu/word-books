@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MessageService } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { InputTextModule } from 'primeng/inputtext'
 import { SelectModule } from 'primeng/select'
-import { ToastModule } from 'primeng/toast';
+import { ToastModule } from 'primeng/toast'
+import { RadioButtonModule } from 'primeng/radiobutton'
 import { SupabaseService } from '../../services/supabase.service'
 
 @Component({
@@ -18,11 +19,12 @@ import { SupabaseService } from '../../services/supabase.service'
     SelectModule,
     InputTextModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
+    RadioButtonModule
   ],
   providers: [MessageService]
 })
-export class OrderComponent {
+export class OrderComponent implements OnInit {
   readonly fb = inject(FormBuilder)
   readonly messageService = inject(MessageService)
   readonly supabase = inject(SupabaseService)
@@ -34,12 +36,43 @@ export class OrderComponent {
     bookName: ['', Validators.required],
     bookAuthor: ['', Validators.required],
     amount: ['', Validators.required],
-    publishingHouse: [''],
-    address: ['', Validators.required],
+    publishingHouse: ['', Validators.required],
+    otherPublishingHouse: [{ value: '', disabled: true }],
+    delivery: ['easybox', Validators.required],
+    homeAddress: [{ value: '', disabled: true }],
     urgency: ['', Validators.required]
   })
   
+  ngOnInit() {
+    this.orderForm.get('delivery')?.valueChanges.subscribe(value => {
+      const homeAddressControl = this.orderForm.get('homeAddress')
+      if (value === 'home') {
+        homeAddressControl?.setValidators([Validators.required])
+        homeAddressControl?.enable()
+      } else {
+        homeAddressControl?.clearValidators()
+        homeAddressControl?.reset()
+        homeAddressControl?.disable()
+      }
+      homeAddressControl?.updateValueAndValidity()
+    })
+
+    this.orderForm.get('publishingHouse')?.valueChanges.subscribe(value => {
+      const otherPublishingHouseControl = this.orderForm.get('otherPublishingHouse')
+      if (value === 'other') otherPublishingHouseControl?.enable()
+      else {
+        otherPublishingHouseControl?.reset()
+        otherPublishingHouseControl?.disable()
+      }
+      otherPublishingHouseControl?.updateValueAndValidity()
+    })
+  }
+
   async onSubmit() {
+    const publishingHouse = this.orderForm.value.publishingHouse === 'other' 
+      ? this.orderForm.value.otherPublishingHouse 
+      : this.orderForm.value.publishingHouse;
+
     const insert = await this.supabase.client
       .from('orders')
       .insert({
@@ -50,14 +83,14 @@ export class OrderComponent {
         book_name: this.orderForm.value.bookName,
         book_author: this.orderForm.value.bookAuthor,
         amount: Number(this.orderForm.value.amount),
-        publishing_house: this.orderForm.value.publishingHouse,
-        address: this.orderForm.value.address,
-        urgency: this.orderForm.value.urgency,
+        publishing_house: publishingHouse,
+        address: this.orderForm.value.delivery === 'home' ? this.orderForm.value.homeAddress : 'easybox',
+        urgency: this.orderForm.value.urgency
       })
 
-    if (insert.error) this.messageService.add({ severity: 'error', summary: 'Error', detail: 'We could not process your order... Please try again' })
+    if (insert.error) this.messageService.add({ severity: 'error', life: 7000, summary: 'Eroare', detail: 'Încercați din nou sau contactați-ne la adresa de email din josul paginii...' })
     else {  
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Order submitted successfully!' })
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Comanda a fost plasată cu succes!' })
       this.orderForm.reset()
     }
   }

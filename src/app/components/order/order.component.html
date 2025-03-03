@@ -1,15 +1,23 @@
 <p-toast />
 
-<div class="flex justify-content-center w-100 h-screen p-5">
-    <div class="flex flex-column w-8">
-        <h1>Place your order</h1>
+<div class="flex justify-content-center w-100 p-5">
+    <div class="flex flex-column col-12 lg:w-8 sm:w-11">
+        <h1>Plasați comanda</h1>
+        <div class="flex flex-column mt-2 publishing-houses">
+            <p>Edituri de unde puteți comanda:</p>
+            <a href="https://www.scriptum.ro/" target="_blank">www.scriptum.ro</a>
+            <a href="https://www.kerigma.ro/" target="_blank">www.kerigma.ro</a>
+            <a href="https://www.ecasacartii.ro/" target="_blank">www.ecasacartii.ro</a>
+            <a href="http://www.stephanus.ro/" target="_blank">www.stephanus.ro</a>
+            <a href="https://viatasisanatate.ro/" target="_blank">www.viatasisanatate.ro</a>
+        </div>
         <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="mt-5 w-100">
             <div class="flex flex-column gap-3">
-                <label for="fullName">Full Name *</label>
+                <label for="fullName">Nume și prenume *</label>
                 <input id="fullName" formControlName="fullName" pInputText />
             </div>
             <div class="flex flex-column gap-3 mt-3">
-                <label for="phone">Phone *</label>
+                <label for="phone">Telefon *</label>
                 <input id="phone" formControlName="phone" pInputText />
             </div>
             <div class="flex flex-column gap-3 mt-3">
@@ -17,29 +25,55 @@
                 <input id="email" formControlName="email" pInputText />
             </div>
             <div class="flex flex-column gap-3 mt-3">
-                <label for="bookName">Book Name *</label>
+                <label for="bookName">Numele cărții *</label>
                 <input id="bookName" formControlName="bookName" pInputText />
             </div>
             <div class="flex flex-column gap-3 mt-3">
-                <label for="bookAuthor">Book Author *</label>
+                <label for="bookAuthor">Autor *</label>
                 <input id="bookAuthor" formControlName="bookAuthor" pInputText />
             </div>
             <div class="flex flex-column gap-3 mt-3">
-                <label for="publishingHouse">Publishing House</label>
-                <input id="publishingHouse" formControlName="publishingHouse" pInputText />
+                <label for="publishingHouse">Editură</label>
+                <p-select 
+                    id="publishingHouse" 
+                    formControlName="publishingHouse"
+                    [options]="[
+                        {label: 'Scriptum', value: 'scriptum'},
+                        {label: 'Kerigma', value: 'kerigma'},
+                        {label: 'E casa cărții', value: 'ecasacartii'},
+                        {label: 'Stephanus', value: 'stephanus'},
+                        {label: 'Viața și sănătate', value: 'viatasisanatate'},
+                        {label: 'Altă opțiune', value: 'other'}
+                    ]"
+                    placeholder="Alegeți editura"
+                ></p-select>
+                <div *ngIf="orderForm.get('publishingHouse')?.value === 'other'" class="flex flex-column gap-3 mt-3">
+                    <label for="otherPublishingHouse">Editura (lăsați liber dacă nu o știți)</label>
+                    <input id="otherPublishingHouse" formControlName="otherPublishingHouse" pInputText />
+                </div>
             </div>
             <div class="flex flex-column gap-3 mt-3">
-                <label for="amount">Amount *</label>
+                <label for="amount">Număr bucăți *</label>
                 <input id="amount" formControlName="amount" pInputText />
             </div>
             <div class="flex flex-column gap-3 mt-3">
-                <label for="address">Address *</label>
-                <input id="address" formControlName="address" placeholder="Delivery address, or easybox (leave empty if easybox)" pInputText />
+                <label>Adresa *</label>
+                <div class="flex gap-3">
+                    <p-radiobutton formControlName="delivery" name="delivery" value="easybox" inputId="easybox" />
+                    <label for="easybox">Ridicare la Str. Smârdan 13</label>
+                </div>
+                <div class="flex gap-3">
+                    <p-radiobutton formControlName="delivery" name="delivery" value="home" inputId="home" />
+                    <label for="home">Livrare prin curier (+5 RON)</label>
+                </div>
+                <input id="homeAddress" formControlName="homeAddress" pInputText />
             </div>
-            <div class="flex flex-column gap-3 mt-3">
-                <label for="urgency">Urgency *</label>
-                <p-select id="urgency" formControlName="urgency"
-                    [options]="[{label: 'Normal', value: 'normal'}, {label: 'Urgent', value: 'urgent'}, {label: '30 Days', value: '30days'}]"
+            <div class="flex flex-column gap-3 mt-4">
+                <label for="urgency">Timp de livrare *</label>
+                <p-select 
+                    id="urgency" formControlName="urgency"
+                    [options]="[{label: 'Normal', value: 'normal'}, {label: 'Urgent', value: 'urgent'}, {label: '30 de zile', value: '30days'}]"
+                    placeholder="Alegeți"
                 ></p-select>
             </div>
             <p-button label="Submit" [disabled]="orderForm.invalid" styleClass="mt-5 mb-5" (onClick)="onSubmit()" />
