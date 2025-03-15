@@ -22,7 +22,7 @@
             <div formArrayName="books" class="flex flex-column gap-3 mt-3">
                 <div *ngFor="let book of books.controls; let i = index" [formGroupName]="i" class="book-container mt-4">
                     <h3>Cartea {{ i + 1 }}</h3>
-                    <div class="book-fields-container">
+                    <div class="book-inputs-container flex gap-3 pb-2 overflow-x-auto overflow-visible">
                         <div class="flex flex-column gap-3 mt-3">
                             <label for="bookName{{i}}">Numele cărții *</label>
                             <input id="bookName{{i}}" formControlName="bookName" pInputText />

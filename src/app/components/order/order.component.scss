@@ -4,3 +4,22 @@
     flex-direction: column;
   }
 }
+
+.book-inputs-container::-webkit-scrollbar {
+  width: 8px;
+  height: 4px;
+}
+
+.book-inputs-container::-webkit-scrollbar-track {
+  background: var(--p-slate-200);
+  border-radius: 10px;
+}
+
+.book-inputs-container::-webkit-scrollbar-thumb {
+  background: var(--p-slate-400);
+  border-radius: 10px;
+}
+
+.book-inputs-container::-webkit-scrollbar-thumb:hover {
+  background: var(--p-slate-500);
+}
