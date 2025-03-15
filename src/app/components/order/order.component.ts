@@ -72,34 +72,40 @@ export class OrderComponent implements OnInit {
   }
 
   async onSubmit() {
-    this.loading = true;
+    this.loading = true
 
-    const publishingHouse = this.orderForm.value.publishingHouse === 'other' 
-      ? this.orderForm.value.otherPublishingHouse 
-      : this.orderForm.value.publishingHouse;
+    const userDetails = {
+      full_name: this.orderForm.value.fullName,
+      phone: Number(this.orderForm.value.phone),
+      email: this.orderForm.value.email,
+      address: this.orderForm.value.delivery === 'home' ? this.orderForm.value.homeAddress : 'easybox',
+      urgency: this.orderForm.value.urgency
+    }
 
-    // TODO: bug - does not allow insertion of orders which the same email address 
-    // actually, it might be the case of just the email (mathias.onu@protozeph.com) - test with multiple email addresses
-    const insert = await this.supabase.client
+    const orders = []
+    for (const book of this.books.controls) {
+      if (book.value.bookName.length > 0) {
+        orders.push({
+          ...userDetails,
+          book_name: book.value.bookName,
+          book_author: book.value.bookAuthor,
+          amount: Number(book.value.amount),
+          publishing_house: book.value.publishingHouse === 'other' ? book.value.otherPublishingHouse : book.value.publishingHouse,
+          created_at: new Date()
+        })
+      }
+    }
+
+    const { error } = await this.supabase.client
       .from('orders')
-      .insert({
-        created_at: new Date(),
-        full_name: this.orderForm.value.fullName,
-        phone: Number(this.orderForm.value.phone),
-        email: this.orderForm.value.email,
-        book_name: this.orderForm.value.bookName,
-        book_author: this.orderForm.value.bookAuthor,
-        amount: Number(this.orderForm.value.amount),
-        publishing_house: publishingHouse,
-        address: this.orderForm.value.delivery === 'home' ? this.orderForm.value.homeAddress : 'easybox',
-        urgency: this.orderForm.value.urgency
-      })
+      .insert(orders)
 
-    this.loading = false;
+    this.loading = false
 
-    if (insert.error) this.messageService.add({ severity: 'error', life: 7000, summary: 'Eroare', detail: 'Încercați din nou sau contactați-ne la adresa de email din josul paginii...' })
-    else {  
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Comanda a fost plasată cu succes!' });
+    if (error) {
+      this.messageService.add({ severity: 'error', life: 7000, summary: 'Eroare', detail: 'Încercați din nou sau contactați-ne la adresa de email din josul paginii...' })
+    } else {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Comanda a fost plasată cu succes!' })
       this.orderForm.reset()
     }
   }
@@ -110,7 +116,7 @@ export class OrderComponent implements OnInit {
       bookAuthor: [''],
       publishingHouse: [''],
       otherPublishingHouse: [{ value: '', disabled: true }],
-      amount: ['', i === 0 ? Validators.required : '']
+      amount: [1, i === 0 ? Validators.required : '']
     }))
   }
 }
