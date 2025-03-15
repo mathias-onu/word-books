@@ -105,7 +105,7 @@ export class OrderComponent implements OnInit {
     if (error) {
       this.messageService.add({ severity: 'error', life: 7000, summary: 'Eroare', detail: 'Încercați din nou sau contactați-ne la adresa de email din josul paginii...' })
     } else {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Comanda a fost plasată cu succes!' })
+      this.messageService.add({ severity: 'success', life: 10000, summary: 'Success', detail: 'Comanda a fost plasată cu succes! Vă vom contacta în cel mai scurt timp posibil pentru confirmare și livrare.' })
       this.orderForm.reset()
     }
   }
