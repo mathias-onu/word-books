@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms'
+import { SupabaseService } from '../../services/supabase.service'
 import { MessageService } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { InputTextModule } from 'primeng/inputtext'
 import { SelectModule } from 'primeng/select'
 import { ToastModule } from 'primeng/toast'
 import { RadioButtonModule } from 'primeng/radiobutton'
-import { SupabaseService } from '../../services/supabase.service'
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-order',
@@ -20,7 +21,8 @@ import { SupabaseService } from '../../services/supabase.service'
     InputTextModule,
     ButtonModule,
     ToastModule,
-    RadioButtonModule
+    RadioButtonModule,
+    InputNumberModule
   ],
   providers: [MessageService]
 })
@@ -33,16 +35,17 @@ export class OrderComponent implements OnInit {
     fullName: ['', Validators.required],
     phone: ['', Validators.required],
     email: [''],
-    bookName: ['', Validators.required],
-    bookAuthor: ['', Validators.required],
-    amount: ['', Validators.required],
-    publishingHouse: ['', Validators.required],
-    otherPublishingHouse: [{ value: '', disabled: true }],
     delivery: ['easybox', Validators.required],
     homeAddress: [{ value: '', disabled: true }],
-    urgency: ['', Validators.required]
+    urgency: ['', Validators.required],
+    books: this.fb.array(this.createBooks())
   })
-  
+  loading: boolean = false
+
+  get books(): FormArray {
+    return this.orderForm.get('books') as FormArray
+  }
+
   ngOnInit() {
     this.orderForm.get('delivery')?.valueChanges.subscribe(value => {
       const homeAddressControl = this.orderForm.get('homeAddress')
@@ -69,10 +72,14 @@ export class OrderComponent implements OnInit {
   }
 
   async onSubmit() {
+    this.loading = true;
+
     const publishingHouse = this.orderForm.value.publishingHouse === 'other' 
       ? this.orderForm.value.otherPublishingHouse 
       : this.orderForm.value.publishingHouse;
 
+    // TODO: bug - does not allow insertion of orders which the same email address 
+    // actually, it might be the case of just the email (mathias.onu@protozeph.com) - test with multiple email addresses
     const insert = await this.supabase.client
       .from('orders')
       .insert({
@@ -88,10 +95,22 @@ export class OrderComponent implements OnInit {
         urgency: this.orderForm.value.urgency
       })
 
+    this.loading = false;
+
     if (insert.error) this.messageService.add({ severity: 'error', life: 7000, summary: 'Eroare', detail: 'Încercați din nou sau contactați-ne la adresa de email din josul paginii...' })
     else {  
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Comanda a fost plasată cu succes!' })
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Comanda a fost plasată cu succes!' });
       this.orderForm.reset()
     }
+  }
+
+  private createBooks(): FormGroup[] {
+    return Array(5).fill(null).map((item, i) => this.fb.group({
+      bookName: ['', i === 0 ? Validators.required : ''],
+      bookAuthor: [''],
+      publishingHouse: [''],
+      otherPublishingHouse: [{ value: '', disabled: true }],
+      amount: ['', i === 0 ? Validators.required : '']
+    }))
   }
 }

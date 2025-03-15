@@ -4,15 +4,65 @@
     <div class="flex flex-column col-12 lg:w-8 sm:w-11">
         <h1>Plasați comanda</h1>
         <div class="flex flex-column mt-2 publishing-houses">
-            <p>Edituri de unde puteți comanda:</p>
-            <a href="https://www.scriptum.ro/" target="_blank">www.scriptum.ro</a>
-            <a href="https://www.kerigma.ro/" target="_blank">www.kerigma.ro</a>
-            <a href="https://www.ecasacartii.ro/" target="_blank">www.ecasacartii.ro</a>
-            <a href="http://www.stephanus.ro/" target="_blank">www.stephanus.ro</a>
-            <a href="https://viatasisanatate.ro/" target="_blank">www.viatasisanatate.ro</a>
+            <p class="line-height-4 mt-1">Căutați cărți pe website-urile de mai jos, completați formularul, și primiți cărțile FĂRĂ COSTUL TRANSPORTULUI.</p>
+            <div class="grid mt-2">
+                <a href="https://www.scriptum.ro/" target="_blank" class="col-3">scriptum.ro</a>
+                <a href="https://www.kerigma.ro/" target="_blank" class="col-3">kerigma.ro</a>
+                <a href="https://viatasisanatate.ro/" target="_blank" class="col-4">viatasisanatate.ro</a>
+            </div>
+            <div class="grid">
+                <a href="https://www.ecasacartii.ro/" target="_blank" class="col-4">ecasacartii.ro</a>
+                <a href="https://www.stephanus.ro/" target="_blank" class="col-4">stephanus.ro</a>
+            </div>
+            <div class="grid">
+
+            </div>
         </div>
         <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="mt-5 w-100">
-            <div class="flex flex-column gap-3">
+            <div formArrayName="books" class="flex flex-column gap-3 mt-3">
+                <div *ngFor="let book of books.controls; let i = index" [formGroupName]="i" class="book-container mt-4">
+                    <h3>Cartea {{ i + 1 }}</h3>
+                    <div class="book-fields-container">
+                        <div class="flex flex-column gap-3 mt-3">
+                            <label for="bookName{{i}}">Numele cărții *</label>
+                            <input id="bookName{{i}}" formControlName="bookName" pInputText />
+                        </div>
+                        <div class="flex flex-column gap-3 mt-3">
+                            <label for="bookAuthor{{i}}">Autor</label>
+                            <input id="bookAuthor{{i}}" formControlName="bookAuthor" pInputText />
+                        </div>
+                        <div class="flex flex-column gap-3 mt-3">
+                            <label for="publishingHouse{{i}}">Editură</label>
+                            <p-select 
+                                id="publishingHouse{{i}}" 
+                                formControlName="publishingHouse"
+                                [options]="[
+                                    {label: 'Scriptum', value: 'scriptum'},
+                                    {label: 'Kerigma', value: 'kerigma'},
+                                    {label: 'E casa cărții', value: 'ecasacartii'},
+                                    {label: 'Stephanus', value: 'stephanus'},
+                                    {label: 'Viața și sănătate', value: 'viatasisanatate'},
+                                    {label: 'Altă opțiune', value: 'other'}
+                                ]"
+                                placeholder="Alegeți editura"
+                            ></p-select>
+                        </div>
+                        <div class="flex flex-column gap-3 mt-3">
+                            <label for="amount{{i}}">Număr bucăți *</label>
+                            <p-inputnumber inputId="integeronly" formControlName="amount" />
+                        </div>
+                    </div>
+                    <div *ngIf="book.get('publishingHouse')!.value === 'other'" class="other-publisher-container mt-3">
+                        <div class="flex flex-column gap-3">
+                            <label for="otherPublishingHouse{{i}}">Editura (lăsați liber dacă nu o știți)</label>
+                            <input id="otherPublishingHouse{{i}}" formControlName="otherPublishingHouse" pInputText />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- User details -->
+            <h3 class="mt-5">Detalii de contact</h3>
+            <div class="flex flex-column gap-3 mt-3">
                 <label for="fullName">Nume și prenume *</label>
                 <input id="fullName" formControlName="fullName" pInputText />
             </div>
@@ -25,38 +75,6 @@
                 <input id="email" formControlName="email" pInputText />
             </div>
             <div class="flex flex-column gap-3 mt-3">
-                <label for="bookName">Numele cărții *</label>
-                <input id="bookName" formControlName="bookName" pInputText />
-            </div>
-            <div class="flex flex-column gap-3 mt-3">
-                <label for="bookAuthor">Autor *</label>
-                <input id="bookAuthor" formControlName="bookAuthor" pInputText />
-            </div>
-            <div class="flex flex-column gap-3 mt-3">
-                <label for="publishingHouse">Editură</label>
-                <p-select 
-                    id="publishingHouse" 
-                    formControlName="publishingHouse"
-                    [options]="[
-                        {label: 'Scriptum', value: 'scriptum'},
-                        {label: 'Kerigma', value: 'kerigma'},
-                        {label: 'E casa cărții', value: 'ecasacartii'},
-                        {label: 'Stephanus', value: 'stephanus'},
-                        {label: 'Viața și sănătate', value: 'viatasisanatate'},
-                        {label: 'Altă opțiune', value: 'other'}
-                    ]"
-                    placeholder="Alegeți editura"
-                ></p-select>
-                <div *ngIf="orderForm.get('publishingHouse')?.value === 'other'" class="flex flex-column gap-3 mt-3">
-                    <label for="otherPublishingHouse">Editura (lăsați liber dacă nu o știți)</label>
-                    <input id="otherPublishingHouse" formControlName="otherPublishingHouse" pInputText />
-                </div>
-            </div>
-            <div class="flex flex-column gap-3 mt-3">
-                <label for="amount">Număr bucăți *</label>
-                <input id="amount" formControlName="amount" pInputText />
-            </div>
-            <div class="flex flex-column gap-3 mt-3">
                 <label>Adresa *</label>
                 <div class="flex gap-3">
                     <p-radiobutton formControlName="delivery" name="delivery" value="easybox" inputId="easybox" />
@@ -64,7 +82,7 @@
                 </div>
                 <div class="flex gap-3">
                     <p-radiobutton formControlName="delivery" name="delivery" value="home" inputId="home" />
-                    <label for="home">Livrare prin curier (+5 RON)</label>
+                    <label for="home">Adusă acasă (+10 RON)</label>
                 </div>
                 <input id="homeAddress" formControlName="homeAddress" pInputText />
             </div>
@@ -72,11 +90,23 @@
                 <label for="urgency">Timp de livrare *</label>
                 <p-select 
                     id="urgency" formControlName="urgency"
-                    [options]="[{label: 'Normal', value: 'normal'}, {label: 'Urgent', value: 'urgent'}, {label: '30 de zile', value: '30days'}]"
+                    [options]="[
+                        { label: '6 zile = preț standard', value: '6zile' },
+                        { label: '3 zile = +5% preț carte', value: '3zile' },
+                        { label: '0 zile = REDUCERE 5%', value: '0zile' }
+                    ]"
                     placeholder="Alegeți"
                 ></p-select>
             </div>
-            <p-button label="Submit" [disabled]="orderForm.invalid" styleClass="mt-5 mb-5" (onClick)="onSubmit()" />
+            <p-button
+                [disabled]="orderForm.invalid || loading" 
+                styleClass="mt-5 mb-5" 
+                (onClick)="onSubmit()">
+                <ng-container *ngIf="loading; else buttonLabel"> 
+                    <i class="pi pi-spin pi-spinner"></i>
+                </ng-container>
+                <ng-template #buttonLabel>Comandă</ng-template>
+            </p-button>
         </form>
     </div>
 </div>
