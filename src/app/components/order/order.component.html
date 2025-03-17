@@ -37,25 +37,22 @@
                                 id="publishingHouse{{i}}" 
                                 formControlName="publishingHouse"
                                 [options]="[
-                                    {label: 'Scriptum', value: 'scriptum'},
-                                    {label: 'Kerigma', value: 'kerigma'},
-                                    {label: 'E casa cărții', value: 'ecasacartii'},
-                                    {label: 'Stephanus', value: 'stephanus'},
-                                    {label: 'Viața și sănătate', value: 'viatasisanatate'},
-                                    {label: 'Altă opțiune', value: 'other'}
+                                    {label: 'Toate editurile', value: 'TOATE_EDITURILE'},
+                                    {label: '+ Altă editură', value: 'other'}
                                 ]"
+                                [appendTo]="'body'"
                                 placeholder="Alegeți editura"
                             ></p-select>
+                        </div>
+                        <div *ngIf="book.get('publishingHouse')!.value === 'other'" class="other-publisher-container mt-3">
+                            <div class="flex flex-column gap-3">
+                                <label for="otherPublishingHouse{{i}}">+ Altă editură</label>
+                                <input id="otherPublishingHouse{{i}}" formControlName="otherPublishingHouse" pInputText />
+                            </div>
                         </div>
                         <div class="flex flex-column gap-3 mt-3">
                             <label for="amount{{i}}">Număr bucăți *</label>
                             <p-inputnumber inputId="integeronly" formControlName="amount" />
-                        </div>
-                    </div>
-                    <div *ngIf="book.get('publishingHouse')!.value === 'other'" class="other-publisher-container mt-3">
-                        <div class="flex flex-column gap-3">
-                            <label for="otherPublishingHouse{{i}}">Editura (lăsați liber dacă nu o știți)</label>
-                            <input id="otherPublishingHouse{{i}}" formControlName="otherPublishingHouse" pInputText />
                         </div>
                     </div>
                 </div>
@@ -93,8 +90,9 @@
                     [options]="[
                         { label: '6 zile = preț standard', value: '6zile' },
                         { label: '3 zile = +5% preț carte', value: '3zile' },
-                        { label: '0 zile = REDUCERE 5%', value: '0zile' }
+                        { label: '30 zile = REDUCERE 5%', value: '0zile' }
                     ]"
+                    [appendTo]="'body'"
                     placeholder="Alegeți"
                 ></p-select>
             </div>

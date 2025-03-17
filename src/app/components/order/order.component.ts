@@ -115,7 +115,7 @@ export class OrderComponent implements OnInit {
       bookName: ['', i === 0 ? Validators.required : ''],
       bookAuthor: [''],
       publishingHouse: [''],
-      otherPublishingHouse: [{ value: '', disabled: true }],
+      otherPublishingHouse: [{ value: '', disabled: false }],
       amount: [1, i === 0 ? Validators.required : '']
     }))
   }
